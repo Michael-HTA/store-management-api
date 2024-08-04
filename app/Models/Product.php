@@ -9,6 +9,19 @@ class Product extends Model
 {
     use HasFactory;
 
+    public $fillable = [
+        'name',
+        "manufacturing_date",
+        "expiry_date",
+        "quantity",
+        "unit",
+        "price",
+        "model_form_id",
+        "category_id",
+        "manfacuturer_id",
+        "supplier_id",
+    ];
+
     public function manufacturer(){
 
         return $this->belongsTo(Manufacturer::class);

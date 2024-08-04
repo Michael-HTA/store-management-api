@@ -3,10 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Manufacturer;
 use App\Models\ModelForm;
+use App\Models\Product;
+use App\Models\Supplier;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -106,27 +110,81 @@ class DatabaseSeeder extends Seeder
     ];
 
 
+    public $suppliers = [
+        "Myanmar Pharmaceutical Industry (MPI)" => "09-00000000",
+        "Global Star Medical Co., Ltd." => "09-00000000",
+        "Sanofi Myanmar" => "09-00000000",
+        "Pfizer Myanmar" => "09-00000000",
+        "Johnson & Johnson Myanmar" => "09-00000000",
+        "MSD Myanmar" => "09-00000000",
+        "AstraZeneca Myanmar" => "09-00000000",
+        "Boehringer Ingelheim Myanmar" => "09-00000000",
+        "Novartis Myanmar" => "09-00000000",
+        "Roche Myanmar" => "09-00000000",
+    ];
+
+    public $manufacturers = [
+        "Pfizer Inc.",
+        "Johnson & Johnson",
+        "Roche Holding AG",
+        "Novartis International AG",
+        "Merck & Co., Inc.",
+        "Sanofi S.A.",
+        "GlaxoSmithKline plc (GSK)",
+        "AstraZeneca PLC",
+        "Bayer AG",
+        "Boehringer Ingelheim GmbH",
+    ];
+
+
     public function run(): void
     {
         // User::factory(10)->create();
 
         // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
+        //     'name' => 'admin',
+        //     'email' => 'admin@gmail.com',
+        //     'password' => Hash::make('password'),
         // ]);
 
-        foreach($this->form_data as $key => $value){
-            Category::create([
-                'name' => $key,
-                'description' => $value,
-            ]);
-        }
+        // foreach($this->form_data as $key => $value){
+        //     Category::create([
+        //         'name' => $key,
+        //         'description' => $value,
+        //     ]);
+        // }
 
-        foreach($this->model_forms as $model){
-            ModelForm::create([
-                'name' => $model,
-            ]);
-        }
+        // foreach($this->model_forms as $model){
+        //     ModelForm::create([
+        //         'name' => $model,
+        //     ]);
+        // }
+
+        // foreach($this->suppliers as $key => $value){
+        //         Supplier::create([
+        //             'name' => $key,
+        //             'phone' => $value,
+        //         ]);
+        //     }
+
+        // foreach($this->manufacturers as $manufacturer){
+        //     Manufacturer::create([
+        //         'name' => $manufacturer,
+        //     ]);
+        // }
+
+        Product::create([
+            'name' => 'para',
+            'manufacturing_date' => now(),
+            'expiry_date' => now(),
+            'quantity' => 10,
+            'unit' => 4,
+            'price' => 100,
+            'model_form_id' => 1,
+            'category_id' => 1,
+            'manufacturer_id' => 1,
+            'supplier_id' => 1,
+        ]);
 
 
     }

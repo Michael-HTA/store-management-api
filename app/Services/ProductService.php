@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\InvalidProductException;
 use App\Interfaces\ProductInterface;
 use App\Models\Product;
 
@@ -12,26 +13,24 @@ class ProductService implements ProductInterface
     {
     }
 
-    protected function getProductById($id){
-
+    protected function getProductById($id)
+    {
         return $this->product->where('id',$id)->first();
-
     }
 
     public function storeProduct(array $data)
     {   
         return $this->product->create($data);
-
     }
 
-    public function getProduct(int $perPage)
+    public function getProduct(int $perPage = 30)
     {
         return $this->product->with(['manufacturer', 'supplier', 'modelForm', 'category'])->paginate($perPage);
     }
 
     public function getOutOfStock(int $stock = 5, int $limit = null)
     {
-        $query = $this->product->where('stock', '<', $stock);
+        $query = $this->product->where('quantity', '<', $stock);
 
         if ($limit !== null) $query->limit($limit);
 
@@ -47,7 +46,9 @@ class ProductService implements ProductInterface
     {
         $product = $this->getProductById($id);
 
-        return $product ? $product->update($data) : null;
+        if(!$product) throw new InvalidProductException("Cannot find the product");
+
+        return $product->update($data);
 
     }
 
@@ -55,7 +56,9 @@ class ProductService implements ProductInterface
     {
         $product = $this->getProductById($id);
 
-        return $product ? false : $product->delete();
+        if(!$product) throw new InvalidProductException("Cannot find the product");
+
+        return $product->delete();
 
     }
 }
