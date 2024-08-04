@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\ModelForm;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -87,6 +88,23 @@ class DatabaseSeeder extends Seeder
         "Cough Suppressants" => "Medicines that suppress coughing",
     ];
 
+    public $model_forms = [
+        'Tablet',
+        'Liquid',
+        'Capsule',
+        'Powder',
+        'Granule',
+        'Syrup',
+        'Suspension',
+        'Cream',
+        'Gel',
+        'Lotion',
+        'Suppositorie',
+        'Inhaler',
+        'Injectable',
+        'Implant',
+    ];
+
 
     public function run(): void
     {
@@ -103,5 +121,13 @@ class DatabaseSeeder extends Seeder
                 'description' => $value,
             ]);
         }
+
+        foreach($this->model_forms as $model){
+            ModelForm::create([
+                'name' => $model,
+            ]);
+        }
+
+
     }
 }
