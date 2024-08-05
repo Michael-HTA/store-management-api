@@ -13,13 +13,13 @@ class ProductService implements ProductInterface
     {
     }
 
-    protected function getProductById($id)
-    {
-        return $this->product->where('id',$id)->first();
+    public function getProductById($id)
+    {   //return ModelNotFoundException
+        return $this->product::findOrFail($id);
     }
 
     public function storeProduct(array $data)
-    {   
+    {
         return $this->product->create($data);
     }
 
@@ -46,8 +46,6 @@ class ProductService implements ProductInterface
     {
         $product = $this->getProductById($id);
 
-        if(!$product) throw new InvalidProductException("Cannot find the product");
-
         return $product->update($data);
 
     }
@@ -56,9 +54,20 @@ class ProductService implements ProductInterface
     {
         $product = $this->getProductById($id);
 
-        if(!$product) throw new InvalidProductException("Cannot find the product");
-
         return $product->delete();
 
+    }
+
+    public function subtractStock(int $id, int $quantity)
+    {
+        $product = $this->getProductById($id);
+
+        if($product->quantity <= 0) throw new InvalidProductException("Out of Stock!");
+
+        if($product->quantity < $quantity) throw new InvalidProductException('Insufficient stock for this product');
+
+        $product->quantity = $product->quantity - $quantity;
+
+        return $product->save();
     }
 }
