@@ -15,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        //interface binding
+        $this->app->bind(ProductInterface::class,ProductService::class);
     }
 
     /**
@@ -23,8 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {   
-        //interface binding
-        $this->app->bind(ProductInterface::class,ProductService::class);
+       
 
         //custom response
         Response::macro('error', function (Request $request, $data, $message = null, $code = 400) {

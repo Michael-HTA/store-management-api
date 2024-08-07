@@ -40,7 +40,7 @@ class ProductService implements ProductInterface
 
     public function findProduct(int $id)
     {
-        return $this->product->with(['manufacturer', 'supplier', 'modelForm', 'category'])->where('id', $id)->first();
+        return $this->product->with(['manufacturer:id,name', 'supplier:id,name', 'modelForm:id,name', 'category:id,name'])->where('id', $id)->firstOrFail();
     }
 
     public function updateProduct(int $id, array $data)

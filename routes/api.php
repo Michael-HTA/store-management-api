@@ -23,3 +23,5 @@ Route::prefix('/v1')->middleware('auth:sanctum')->group(function(){
 });
 
 Route::get('/product',[ProductController::class,'index']);
+Route::get('/product/outofstock',[ProductController::class,'outOfStock']);
+Route::get('/product/{id}',[ProductController::class,'show']);
