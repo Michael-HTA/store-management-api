@@ -14,7 +14,8 @@ class ProductService implements ProductInterface
     }
 
     public function getProductById($id)
-    {   //return ModelNotFoundException
+    {   
+        //return ModelNotFoundException if fail
         return $this->product::findOrFail($id);
     }
 
@@ -25,7 +26,7 @@ class ProductService implements ProductInterface
 
     public function getProduct(int $perPage = 30)
     {
-        return $this->product->with(['manufacturer', 'supplier', 'modelForm', 'category'])->paginate($perPage);
+        return $this->product->with(['manufacturer:id,name', 'supplier:id,name', 'modelForm:id,name', 'category:id,name'])->paginate($perPage);
     }
 
     public function getOutOfStock(int $stock = 5, int $limit = null)

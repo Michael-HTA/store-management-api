@@ -173,17 +173,30 @@ class DatabaseSeeder extends Seeder
         //     ]);
         // }
 
+        // Product::create([
+        //     'name' => 'para',
+        //     'manufacturing_date' => now(),
+        //     'expiry_date' => now(),
+        //     'quantity' => 10,
+        //     'unit' => 4,
+        //     'price' => 100,
+        //     'model_form_id' => 1,
+        //     'category_id' => 1,
+        //     'manufacturer_id' => 1,
+        //     'supplier_id' => 1,
+        // ]);
+
         Product::create([
-            'name' => 'para',
+            'name' => 'Decogen',
             'manufacturing_date' => now(),
             'expiry_date' => now(),
-            'quantity' => 10,
-            'unit' => 4,
+            'quantity' => 5,
+            'unit' => 1,
             'price' => 100,
-            'model_form_id' => 1,
-            'category_id' => 1,
-            'manufacturer_id' => 1,
-            'supplier_id' => 1,
+            'model_form_id' => 2,
+            'category_id' => 2,
+            'manufacturer_id' => 2,
+            'supplier_id' => 2,
         ]);
 
 

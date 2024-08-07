@@ -18,9 +18,10 @@ class Product extends Model
         "price",
         "model_form_id",
         "category_id",
-        "manfacuturer_id",
+        "manufacturer_id",
         "supplier_id",
     ];
+
 
     public function manufacturer(){
 

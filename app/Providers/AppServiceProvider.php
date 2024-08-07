@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Interfaces\ProductInterface;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
@@ -20,13 +22,15 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
+    {   
+        //interface binding
+        $this->app->bind(ProductInterface::class,ProductService::class);
+
+        //custom response
         Response::macro('error', function (Request $request, $data, $message = null, $code = 400) {
             $meta = [
                 'method' => $request->getMethod(),
                 'endpoint' => $request->path(),
-                'limit' => $request->limit ?? 0,
-                'offset' => $request->offset ?? 0,
             ];
 
             $responseData = [
@@ -44,8 +48,6 @@ class AppServiceProvider extends ServiceProvider
             $meta = [
                 'method' => $request->getMethod(),
                 'endpoint' => $request->path(),
-                'limit' => $request->limit ?? 0,
-                'offset' => $request->offset ?? 0,
             ];
 
             $responseData = [
