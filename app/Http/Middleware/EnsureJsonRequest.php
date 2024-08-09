@@ -17,6 +17,6 @@ class EnsureJsonRequest
     {
         if ($request->isJson()) return $next($request);
 
-        return response()->error($request,null,"Server only acccept application/json",400);
+        return response()->error($request, null, "Server only acccept application/json", 400);
     }
 }

@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('invoice_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invoice_id')->constrained();
-            $table->foreignId('product_id')->constrained();
+            $table->foreignId('invoice_number_id')->constrained('invoices','invoice_number');
+            $table->string('product_code_id');
             $table->integer('quantity');
             $table->integer('price');
             $table->timestamps();
+            $table->foreign('product_code_id')->references('product_code')->on('products');
         });
     }
 

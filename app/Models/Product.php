@@ -13,6 +13,7 @@ class Product extends Model
         'name',
         "manufacturing_date",
         "expiry_date",
+        "product_code",
         "quantity",
         "unit",
         "price",
@@ -44,6 +45,16 @@ class Product extends Model
     public function supplier(){
 
         return $this->belongsTo(Supplier::class);
+
+    }
+
+    public function generateProudctCode($prefix = "P", $place = 4){
+        
+        $prefix = strtoupper($prefix);
+        
+        $id = self::max('id') + 1;
+
+        return $prefix . sprintf("%0{$place}d",$id);
 
     }
 }

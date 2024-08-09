@@ -6,10 +6,9 @@ use App\Http\Requests\ProductStoreRequest;
 interface ProductInterface{
 
     public function storeProduct(array $data);
+    public function getProductByProductCode(string $id);
     public function getProduct(int $perPage);
-    public function findProduct(int $id);
-    public function updateProduct(int $id, array $data);
-    public function deleteProduct(int $id);
-    public function getOutOfStock(int $stock, int $limit);
-
+    public function findProduct(string $id);
+    public function updateProduct(string $id, array $data);
+    public function deleteProduct(string $id);
 }

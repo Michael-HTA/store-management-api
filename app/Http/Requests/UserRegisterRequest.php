@@ -41,9 +41,6 @@ class UserRegisterRequest extends FormRequest
                 'meta' => [
                     'method' => $this->getMethod(),
                     'endpoint' => $this->path(),
-                    'limit' => $this->input('limit', 0),
-                    'offset' => $this->input('offset', 0),
-                    'total' => 0,
                 ],
                 'data' => [
                     'message' => 'The given data was invalid.',

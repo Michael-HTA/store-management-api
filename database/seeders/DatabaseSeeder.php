@@ -141,57 +141,57 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        // User::factory()->create([
-        //     'name' => 'admin',
-        //     'email' => 'admin@gmail.com',
-        //     'password' => Hash::make('password'),
-        // ]);
+        User::factory()->create([
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('password'),
+        ]);
 
-        // foreach($this->form_data as $key => $value){
-        //     Category::create([
-        //         'name' => $key,
-        //         'description' => $value,
-        //     ]);
-        // }
+        foreach($this->form_data as $key => $value){
+            Category::create([
+                'name' => $key,
+                'description' => $value,
+            ]);
+        }
 
-        // foreach($this->model_forms as $model){
-        //     ModelForm::create([
-        //         'name' => $model,
-        //     ]);
-        // }
+        foreach($this->model_forms as $model){
+            ModelForm::create([
+                'name' => $model,
+            ]);
+        }
 
-        // foreach($this->suppliers as $key => $value){
-        //         Supplier::create([
-        //             'name' => $key,
-        //             'phone' => $value,
-        //         ]);
-        //     }
+        foreach($this->suppliers as $key => $value){
+                Supplier::create([
+                    'name' => $key,
+                    'phone' => $value,
+                ]);
+            }
 
-        // foreach($this->manufacturers as $manufacturer){
-        //     Manufacturer::create([
-        //         'name' => $manufacturer,
-        //     ]);
-        // }
+        foreach($this->manufacturers as $manufacturer){
+            Manufacturer::create([
+                'name' => $manufacturer,
+            ]);
+        }
 
-        // Product::create([
-        //     'name' => 'para',
-        //     'manufacturing_date' => now(),
-        //     'expiry_date' => now(),
-        //     'quantity' => 10,
-        //     'unit' => 4,
-        //     'price' => 100,
-        //     'model_form_id' => 1,
-        //     'category_id' => 1,
-        //     'manufacturer_id' => 1,
-        //     'supplier_id' => 1,
-        // ]);
+        Product::create([
+            'name' => 'para',
+            'manufacturing_date' => now(),
+            'expiry_date' => now(),
+            'product_code' => 'P0001',
+            'quantity' => 10,
+            'price' => 100,
+            'model_form_id' => 1,
+            'category_id' => 1,
+            'manufacturer_id' => 1,
+            'supplier_id' => 1,
+        ]);
 
         Product::create([
             'name' => 'Decogen',
             'manufacturing_date' => now(),
             'expiry_date' => now(),
+            'product_code' => 'P0002',
             'quantity' => 5,
-            'unit' => 1,
             'price' => 100,
             'model_form_id' => 2,
             'category_id' => 2,

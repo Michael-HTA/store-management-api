@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('product_code')->unique();
             $table->date('manufacturing_date');
             $table->date('expiry_date');
             $table->integer('quantity');
-            $table->integer('unit');
             $table->integer('price');
             $table->foreignId('model_form_id')->constrained();
             $table->foreignId('category_id')->constrained();

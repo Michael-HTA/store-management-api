@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use App\Interfaces\ProductInterface;
+use App\Interfaces\SaleInterface;
+use App\Interfaces\StockManagementInterface;
 use App\Services\ProductService;
+use App\Services\SaleService;
+use App\Services\StockManagementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
@@ -17,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //interface binding
         $this->app->bind(ProductInterface::class,ProductService::class);
+        $this->app->bind(StockManagementInterface::class,StockManagementService::class);
+        $this->app->bind(SaleInterface::class,SaleService::class);
     }
 
     /**

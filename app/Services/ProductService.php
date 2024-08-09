@@ -13,14 +13,18 @@ class ProductService implements ProductInterface
     {
     }
 
-    public function getProductById($id)
+    public function getProductByProductCode(string $id)
     {   
         //return ModelNotFoundException if fail
-        return $this->product::findOrFail($id);
+        return $this->product::where('product_code',$id)->firstOrFail();
     }
 
     public function storeProduct(array $data)
-    {
+    {   
+        $prduct_code = $this->product->generateProudctCode();
+
+        $data['product_code'] = $prduct_code;
+
         return $this->product->create($data);
     }
 
@@ -29,46 +33,25 @@ class ProductService implements ProductInterface
         return $this->product->with(['manufacturer:id,name', 'supplier:id,name', 'modelForm:id,name', 'category:id,name'])->paginate($perPage);
     }
 
-    public function getOutOfStock(int $stock = 5, int $limit = null)
+    public function findProduct(string $id)
     {
-        $query = $this->product->where('quantity', '<', $stock);
-
-        if ($limit !== null) $query->limit($limit);
-
-        return $query->get();
+        return $this->product->with(['manufacturer:id,name', 'supplier:id,name', 'modelForm:id,name', 'category:id,name'])->where('product_code', $id)->firstOrFail();
     }
 
-    public function findProduct(int $id)
+    public function updateProduct(string $id, array $data)
     {
-        return $this->product->with(['manufacturer:id,name', 'supplier:id,name', 'modelForm:id,name', 'category:id,name'])->where('id', $id)->firstOrFail();
-    }
-
-    public function updateProduct(int $id, array $data)
-    {
-        $product = $this->getProductById($id);
+        $product = $this->getProductByProductCode($id);
 
         return $product->update($data);
 
     }
 
-    public function deleteProduct(int $id)
+    public function deleteProduct(string $id)
     {
-        $product = $this->getProductById($id);
+        $product = $this->getProductByProductCode($id);
 
         return $product->delete();
 
     }
 
-    public function subtractStock(int $id, int $quantity)
-    {
-        $product = $this->getProductById($id);
-
-        if($product->quantity <= 0) throw new InvalidProductException("Out of Stock!");
-
-        if($product->quantity < $quantity) throw new InvalidProductException('Insufficient stock for this product');
-
-        $product->quantity = $product->quantity - $quantity;
-
-        return $product->save();
-    }
 }
