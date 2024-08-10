@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
@@ -31,5 +32,8 @@ Route::get('/products/out-of-stock',[StockController::class,'outOfStock']);
 Route::get('/products/{id}',[ProductController::class,'show']);
 Route::delete('/products/{id}',[ProductController::class,'delete']);
 Route::post('/sales',[SaleController::class,'processSale']);
+Route::get('/revenues/daily',[RevenueController::class,'dailyRevenue']);
+Route::get('/revenues/monthly',[RevenueController::class,'monthlyRevenue']);
+Route::get('/revenues/weekly',[RevenueController::class,'weeklyRevenue']);
 
 

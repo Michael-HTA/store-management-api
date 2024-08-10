@@ -18,7 +18,8 @@ return new class extends Migration
             $table->date('manufacturing_date');
             $table->date('expiry_date');
             $table->integer('quantity');
-            $table->integer('price');
+            $table->integer('base_price');
+            $table->integer('sale_price');
             $table->foreignId('model_form_id')->constrained();
             $table->foreignId('category_id')->constrained();
             $table->foreignId('manufacturer_id')->constrained();

@@ -17,7 +17,8 @@ class InvoiceDetailResource extends JsonResource
         return [
             "id" => $this->id,
             "product_code_id" => $this->product_code_id,
-            "price" => $this->price,
+            "base_price" => $this->base_price,
+            "sale_price" => $this->sale_price,
             "quantity" => $this->quantity,
             "invoice_number_id" => $this->invoice_number_id,
         ];

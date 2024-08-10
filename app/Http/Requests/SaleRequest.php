@@ -23,7 +23,8 @@ class SaleRequest extends FormRequest
     {
         return [
             'data.*.product_code_id' => 'required|exists:products,product_code',
-            'data.*.price'      => 'required|integer',
+            'data.*.base_price'      => 'required|integer',
+            'data.*.sale_price'      => 'required|integer',
             'data.*.quantity'   => 'required|integer',
         ];
     }

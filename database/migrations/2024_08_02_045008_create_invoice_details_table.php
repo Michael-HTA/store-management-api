@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('invoice_number_id')->constrained('invoices','invoice_number');
             $table->string('product_code_id');
             $table->integer('quantity');
-            $table->integer('price');
+            $table->integer('base_price');
+            $table->integer('sale_price');
             $table->timestamps();
             $table->foreign('product_code_id')->references('product_code')->on('products');
         });

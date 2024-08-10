@@ -12,7 +12,8 @@ class InvoiceDetail extends Model
     public $fillable = [
         'invoice_number_id',
         'product_code_id',
-        'price',
+        'base_price',
+        'sale_price',
         'quantity',
     ];
 }
