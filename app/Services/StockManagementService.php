@@ -30,4 +30,13 @@ class StockManagementService implements StockManagementInterface{
 
         return $query->get();
     }
+
+    public function addStock(int $stock, string $id)
+    {
+        $product = $this->productService->getProductByProductCode($id);
+
+        $product->quantity += $stock;
+        
+        return $product->save();
+    }
 }

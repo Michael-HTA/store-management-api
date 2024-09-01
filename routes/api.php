@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockController;
@@ -35,5 +36,5 @@ Route::post('/sales',[SaleController::class,'processSale']);
 Route::get('/revenues/daily',[RevenueController::class,'dailyRevenue']);
 Route::get('/revenues/monthly',[RevenueController::class,'monthlyRevenue']);
 Route::get('/revenues/weekly',[RevenueController::class,'weeklyRevenue']);
-
+Route::post('/purchases',[PurchaseController::class,'processPurchase']);
 
