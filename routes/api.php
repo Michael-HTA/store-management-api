@@ -6,6 +6,7 @@ use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,9 +14,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('interest', function () {
+Route::get('/interest', function () {
     return response(['msg' => 100000]);
 });
+
+Route::get('/redis',[DashboardController::class,'index']);
 
 Route::prefix('/v1')->group(function () {
     Route::post('/login', [UserController::class, 'login']);
