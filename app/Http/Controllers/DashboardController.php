@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
 
     public function index(){
-        return response(['msg' => 3800000]);
+        
+        Redis::set('secondkey', 'hello redis from second key');
+        $data = Cache::store('redis')->get('secondkey');
+        return response(['msg' => $data]);
     }
 }
