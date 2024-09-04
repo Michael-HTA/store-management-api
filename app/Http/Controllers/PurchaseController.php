@@ -22,7 +22,7 @@ class PurchaseController extends Controller
                 $stock->addStock($result->quantity,$result->product_code_id);
             }
 
-            return response()->success($request, new PurchaseResource($result), 'Recorded successful', 200);
+            return response()->success($request, new PurchaseResource($result), 'Record insertion successful', 200);
         } catch (Exception $e) {
 
             return response()->error($request, null, $e->getMessage(), 500);

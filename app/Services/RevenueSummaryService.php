@@ -7,7 +7,7 @@ use App\Models\InvoiceDetail;
 use Carbon\Carbon;
 
 class RevenueSummaryService implements RevenueSummaryInterface{
-    
+
     /**
      * This will use carbon for daily, weekly and monthly
      * Carbon::now()->endofweek()->format('Y-m-d')
@@ -18,15 +18,13 @@ class RevenueSummaryService implements RevenueSummaryInterface{
     public function __construct(protected InvoiceDetail $invoiceDetail){}
 
     public function generateRevenue($start,$end){
-        $dailyRevenue = 0;
+
         $from = Carbon::now()->$start();
         $to   = Carbon::now()->$end();
-        $invoices = $this->invoiceDetail->whereBetween('created_at',[$from,$to])->get();
-        foreach($invoices as $invoice){
-            $dailyRevenue += $invoice['quantity'] * ($invoice['sale_price'] - $invoice['base_price']);
-        }
 
-        return $dailyRevenue;
+        $revenue = $this->invoiceDetail->selectRaw('SUM(sale_price - base_price) as revenue')->whereBetween('created_at',[$from,$to])->value('revenue');
+
+        return $revenue;
     }
 
     public function dailyRevenue()
