@@ -19,12 +19,17 @@ class RevenueSummaryService implements RevenueSummaryInterface{
 
     public function generateRevenue($start,$end){
 
+        $totalRevenue = 0;
         $from = Carbon::now()->$start();
         $to   = Carbon::now()->$end();
 
-        $revenue = $this->invoiceDetail->selectRaw('SUM(sale_price - base_price) as revenue')->whereBetween('created_at',[$from,$to])->value('revenue');
+        $revenues = $this->invoiceDetail->select('quantity','sale_price','base_price')->whereBetween('created_at',[$from,$to])->get();
 
-        return $revenue;
+        foreach($revenues as $revenue){
+            $totalRevenue += $revenue['quantity'] * ($revenue['sale_price'] - $revenue['base_price']);
+        }
+
+        return $totalRevenue;
     }
 
     public function dailyRevenue()
