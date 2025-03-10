@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->throttleWithRedis();
         // $middleware->append(EnsureJsonRequest::class);
+        $middleware->validateCsrfTokens(except:['*']);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
