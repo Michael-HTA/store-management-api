@@ -12,7 +12,9 @@ use App\Services\PurchaseService;
 use App\Services\RevenueSummaryService;
 use App\Services\SaleService;
 use App\Services\StockManagementService;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,7 +38,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {   
+
        
+        RateLimiter::for('api', function (Request $request) {
+
+            $token = $request->bearerToken();
+
+            $key = $token ? 'token:' . $token : $request->ip();
+
+            return Limit::perMinute(60)->by($key)->response(function(Request $request){
+                return response()->error($request, null, 'Too Many Attempts', 429);
+            });
+        });
 
         //custom response
         Response::macro('error', function (Request $request, $data, $message = null, $code = 400) {

@@ -37,7 +37,6 @@ class SaleService implements SaleInterface
                 
                 $this->stock->subtractStock($item['product_code_id'], $item['quantity']);
 
-
                 $data = $this->invoiceDetail->create($item);
 
                 $result->push($data);

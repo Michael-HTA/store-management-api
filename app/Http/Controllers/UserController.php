@@ -8,9 +8,9 @@ use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class UserController extends Controller
 {
@@ -34,7 +34,7 @@ class UserController extends Controller
 
             } else {
 
-                return response()->error($request, ['email' => $email, 'password' => $password], 'Email or Password not correct.', 401);
+                return response()->error($request, null, 'Email or Password not correct.', 401);
             }
         } catch (Exception $e) {
 
@@ -70,11 +70,8 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         try {
-            $bear = $request->bearerToken();
-
-            $token = PersonalAccessToken::findToken($bear);
-
-            $token->tokenable->tokens()->delete();
+            
+            $request->user()->currentAccessToken()->delete();
 
             return response()->success($request, null, 'Logout successful', 200);
 

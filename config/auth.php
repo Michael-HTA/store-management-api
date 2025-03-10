@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // 'custom-login-guard' => [
+        //     'driver' => 'custom-login-guard',
+        //     'provider' => 'users',
+        // ]
     ],
 
     /*
@@ -65,7 +70,7 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
+        // 'custom' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],

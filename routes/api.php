@@ -7,6 +7,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Middleware\AuthenticateOnceWithBasicAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +31,9 @@ Route::prefix('/v1')->middleware('auth:sanctum')->group(function(){
     Route::put('/products/{id}',[ProductController::class,'update']);
 });
 
-Route::get('/products',[ProductController::class,'index']);
+Route::get('/products', [ProductController::class, 'index'])
+    ->middleware(['auth:sanctum', 'throttle:api']);
+
 Route::post('/products',[ProductController::class,'store']);
 Route::get('/products/out-of-stock',[StockController::class,'outOfStock']);
 Route::get('/products/{id}',[ProductController::class,'show']);

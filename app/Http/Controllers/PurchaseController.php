@@ -7,7 +7,6 @@ use App\Http\Resources\PurchaseResource;
 use App\Interfaces\PurchaseInterface;
 use App\Interfaces\StockManagementInterface;
 use Exception;
-use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {

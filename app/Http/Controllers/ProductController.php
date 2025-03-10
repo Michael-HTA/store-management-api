@@ -31,7 +31,7 @@ class ProductController extends Controller
         {   
             $data = new ProductResource($this->product->findProduct($id));
 
-            return response()->success($request, $data);
+            return response()->success(request: $request, data: $data);
 
         }catch(ModelNotFoundException $e)
         {

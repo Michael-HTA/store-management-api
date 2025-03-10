@@ -11,9 +11,8 @@ class DashboardController extends Controller
 {
 
     public function index(){
-        
-        Redis::set('secondkey', 'hello redis from second key');
-        $data = Cache::store('redis')->get('secondkey');
+        Redis::set('key', 'hello from the redis');
+        $data = Cache::store('redis')->get('key');
         return response(['msg' => $data]);
     }
 }
