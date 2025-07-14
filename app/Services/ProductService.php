@@ -21,9 +21,9 @@ class ProductService implements ProductInterface
 
     public function storeProduct(array $data)
     {   
-        $prduct_code = $this->product->generateProudctCode();
+        $product_code = $this->product->generateProductCode();
 
-        $data['product_code'] = $prduct_code;
+        $data['product_code'] = $product_code;
 
         return $this->product->create($data);
     }

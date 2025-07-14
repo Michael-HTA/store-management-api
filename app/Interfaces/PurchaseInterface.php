@@ -4,5 +4,5 @@ namespace App\Interfaces;
 
 interface PurchaseInterface
 {
-    public function processPurchase($data);
+    public function store($data);
 }

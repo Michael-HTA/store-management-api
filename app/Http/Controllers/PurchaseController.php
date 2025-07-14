@@ -6,19 +6,26 @@ use App\Http\Requests\PurchaseStoreRequest;
 use App\Http\Resources\PurchaseResource;
 use App\Interfaces\PurchaseInterface;
 use App\Interfaces\StockManagementInterface;
+use App\Interfaces\ProductInterface;
 use Exception;
 
 class PurchaseController extends Controller
 {
-    public function processPurchase(PurchaseStoreRequest $request, PurchaseInterface $purchase, StockManagementInterface $stock)
+    public function store(PurchaseStoreRequest $request, PurchaseInterface $purchase, StockManagementInterface $stock, ProductInterface $product)
     {
         try {
             $data = $request->validated();
 
-            $result = $purchase->processPurchase($data);
+            $result = $purchase->store($data);
 
-            if($result){
-                $stock->addStock($result->quantity,$result->product_code_id);
+            $retrievedProduct = $product->getProductByProductCode($result->product_code_id);
+
+            if ($result && $retrievedProduct->base_price < $result->purchase_price) {
+                $product->updateProduct($result->product_code_id, ['base_price' => $result->purchase_price]);
+            }
+
+            if ($result) {
+                $stock->addStock($result->quantity, $result->product_code_id);
             }
 
             return response()->success($request, new PurchaseResource($result), 'Record insertion successful', 200);

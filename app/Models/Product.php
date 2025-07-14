@@ -49,7 +49,7 @@ class Product extends Model
 
     }
 
-    public function generateProudctCode($prefix = "P", $place = 4){
+    public function generateProductCode($prefix = "P", $place = 4){
         
         $prefix = strtoupper($prefix);
         

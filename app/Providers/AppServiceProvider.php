@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,12 +43,12 @@ class AppServiceProvider extends ServiceProvider
        
         RateLimiter::for('api', function (Request $request) {
 
-            $token = $request->bearerToken();
+            // $token = $request->bearerToken();
 
-            $key = $token ? 'token:' . $token : $request->ip();
+            $key = $request->ip() . $request->path();
 
-            return Limit::perMinute(60)->by($key)->response(function(Request $request){
-                return response()->error($request, null, 'Too Many Attempts', 429);
+            return Limit::perMinute(10)->by($key)->response(function(Request $request) use ($key){
+                return response()->error($request, $key, 'Too Many Attempts', HttpFoundationResponse::HTTP_TOO_MANY_REQUESTS);
             });
         });
 

@@ -22,7 +22,7 @@ class StockManagementService implements StockManagementInterface{
         return $product->save();
     }
 
-    public function getOutOfStock(int $stock = 5, int $limit = null)
+    public function getOutOfStock(int $stock = 5, ?int $limit = null)
     {
         $query = $this->product->where('quantity', '<', $stock);
 

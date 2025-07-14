@@ -7,7 +7,6 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Middleware\AuthenticateOnceWithBasicAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,11 +22,11 @@ Route::get('/redis',[DashboardController::class,'index']);
 
 Route::prefix('/v1')->group(function () {
     Route::post('/login', [UserController::class, 'login']);
-    Route::post('/register', [UserController::class, 'register']);
+    Route::put('/register', [UserController::class, 'register']);
 });
 
 Route::prefix('/v1')->middleware('auth:sanctum')->group(function(){
-    Route::get('/logout', [UserController::class, 'logout']);
+    Route::post('/logout', [UserController::class, 'logout']);
     Route::put('/products/{id}',[ProductController::class,'update']);
 });
 
@@ -42,5 +41,5 @@ Route::post('/sales',[SaleController::class,'processSale']);
 Route::get('/revenues/daily',[RevenueController::class,'dailyRevenue']);
 Route::get('/revenues/monthly',[RevenueController::class,'monthlyRevenue']);
 Route::get('/revenues/weekly',[RevenueController::class,'weeklyRevenue']);
-Route::post('/purchases',[PurchaseController::class,'processPurchase']);
+Route::post('/purchases',[PurchaseController::class,'store']);
 

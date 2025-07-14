@@ -7,16 +7,8 @@ use App\Models\Purchase;
 class PurchaseService implements PurchaseInterface{
 
     
-    public function processPurchase($data)
+    public function store($data)
     {
-        $model = new Purchase();
-
-        foreach($data as $key => $value){
-            $model->$key = $value;
-        }
-
-        $model->save();
-
-        return $model;
+        return Purchase::create($data);
     }
 }
