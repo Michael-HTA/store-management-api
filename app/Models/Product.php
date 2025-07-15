@@ -50,12 +50,16 @@ class Product extends Model
     }
 
     public function generateProductCode($prefix = "P", $place = 4){
-        
+
         $prefix = strtoupper($prefix);
-        
+
         $id = self::max('id') + 1;
 
         return $prefix . sprintf("%0{$place}d",$id);
 
+    }
+
+    public function stock(){
+        return $this->hasOne(Stock::class, 'product_id', 'id');
     }
 }

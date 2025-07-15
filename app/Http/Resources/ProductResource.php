@@ -21,7 +21,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'manufacturing_date' => $this->manufacturing_date,
             'expiry_date' => $this->expiry_date,
-            'quantity' => $this->quantity,
+            'stock' => new StockResource($this->whenLoaded('stock')),
             'product_code' => $this->product_code,
             'base_price' => $this->base_price,
             'sale_price' => $this->sale_price,

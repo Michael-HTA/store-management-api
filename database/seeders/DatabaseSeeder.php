@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\ModelForm;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\Supplier;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -178,7 +179,6 @@ class DatabaseSeeder extends Seeder
             'manufacturing_date' => now(),
             'expiry_date' => now(),
             'product_code' => 'P0001',
-            'quantity' => 10,
             'base_price' => 100,
             'sale_price' => 150,
             'model_form_id' => 1,
@@ -192,13 +192,22 @@ class DatabaseSeeder extends Seeder
             'manufacturing_date' => now(),
             'expiry_date' => now(),
             'product_code' => 'P0002',
-            'quantity' => 5,
             'base_price' => 100,
             'sale_price' => 200,
             'model_form_id' => 2,
             'category_id' => 2,
             'manufacturer_id' => 2,
             'supplier_id' => 2,
+        ]);
+
+        Stock::create([
+            'quantity' => 10,
+            'product_id' => 1,
+        ]);
+
+        Stock::create([
+            'quantity' => 20,
+            'product_id' => 2,
         ]);
 
 

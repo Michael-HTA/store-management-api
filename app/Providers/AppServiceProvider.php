@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
-use App\Interfaces\ProductInterface;
 use App\Interfaces\PurchaseInterface;
 use App\Interfaces\RevenueSummaryInterface;
 use App\Interfaces\SaleInterface;
 use App\Interfaces\StockManagementInterface;
-use App\Services\ProductService;
+use App\Repositories\Product\ProductRepository;
+use App\Repositories\Product\ProductRepositoryImplementation;
+use App\Services\Product\ProductService as ProductProductService;
+use App\Services\Product\ProductServiceImplementation;
 use App\Services\PurchaseService;
 use App\Services\RevenueSummaryService;
 use App\Services\SaleService;
@@ -27,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //interface binding
-        $this->app->bind(ProductInterface::class,ProductService::class);
+        $this->app->bind(ProductProductService::class,ProductServiceImplementation::class);
+        $this->app->bind(ProductRepository::class,ProductRepositoryImplementation::class);
         $this->app->bind(StockManagementInterface::class,StockManagementService::class);
         $this->app->bind(SaleInterface::class,SaleService::class);
         $this->app->bind(RevenueSummaryInterface::class,RevenueSummaryService::class);
@@ -38,9 +41,9 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {   
+    {
 
-       
+
         RateLimiter::for('api', function (Request $request) {
 
             // $token = $request->bearerToken();

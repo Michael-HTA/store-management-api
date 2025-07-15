@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
-use App\Interfaces\ProductInterface;
+use App\Services\Product\ProductService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -15,9 +15,9 @@ class ProductController extends Controller
 {
     //
 
-    public function __construct(protected ProductInterface $product)
+    public function __construct(protected ProductService $product)
     {
-        
+
     }
 
     public function index()
@@ -28,8 +28,8 @@ class ProductController extends Controller
     public function show($id, Request $request)
     {
         try
-        {   
-            $data = new ProductResource($this->product->findProduct($id));
+        {
+            $data = new ProductResource($this->product->getByCode($id));
 
             return response()->success(request: $request, data: $data);
 
@@ -53,7 +53,7 @@ class ProductController extends Controller
 
             return response()->error($request, null, 'Internal Server Error', 500);
         }
-        
+
     }
 
     public function update($id, ProductStoreRequest $request){
@@ -64,7 +64,7 @@ class ProductController extends Controller
             $result = new ProductResource($this->product->updateProduct($id,$data));
 
             return response()->success($request, $result, 'Update successful', 200);
-            
+
         }catch (Exception $e) {
 
             // Log::error($e->getMessage());

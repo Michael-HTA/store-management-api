@@ -1,11 +1,8 @@
 <?php
-namespace App\Services;
+namespace App\Services\Stock;
+use App\Services\Stock\StockService;
 
-use App\Exceptions\InvalidProductException;
-use App\Interfaces\StockManagementInterface;
-use App\Models\Product;
-
-class StockManagementService implements StockManagementInterface{
+class  StockServiceImplementation implements StockService{
 
     public function __construct(protected ProductService $productService, protected Product $product){}
 
@@ -36,7 +33,7 @@ class StockManagementService implements StockManagementInterface{
         $product = $this->productService->getProductByProductCode($id);
 
         $product->quantity += $stock;
-        
+
         return $product->save();
     }
 }

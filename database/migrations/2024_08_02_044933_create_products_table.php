@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('product_code')->unique();
             $table->date('manufacturing_date');
             $table->date('expiry_date');
-            $table->integer('quantity');
             $table->integer('base_price');
             $table->integer('sale_price');
             $table->foreignId('model_form_id')->constrained();
