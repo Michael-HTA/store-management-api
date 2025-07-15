@@ -30,8 +30,8 @@ Route::prefix('/v1')->middleware('auth:sanctum')->group(function(){
     Route::put('/products/{id}',[ProductController::class,'update']);
 });
 
-Route::get('/products', [ProductController::class, 'index'])
-    ->middleware(['auth:sanctum', 'throttle:api']);
+Route::get('/products', [ProductController::class, 'index']);
+    // ->middleware(['auth:sanctum', 'throttle:api']);
 
 Route::post('/products',[ProductController::class,'store']);
 Route::get('/products/out-of-stock',[StockController::class,'outOfStock']);

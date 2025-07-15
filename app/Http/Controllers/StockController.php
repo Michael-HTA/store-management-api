@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductCollection;
-use App\Interfaces\StockManagementInterface;
-use App\Services\StockManagementService;
+use App\Services\Stock\StockService;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-    public function __construct(protected StockManagementInterface $stock)
+    public function __construct(protected StockService $stock)
     {
         
     }

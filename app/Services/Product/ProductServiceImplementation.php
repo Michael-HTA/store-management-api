@@ -24,7 +24,7 @@ class ProductServiceImplementation implements ProductService
         return $this->productRepository->paginate($perPage);
     }
 
-    public function getByCode(string $productCode)
+    public function getByProductCode(string $productCode)
     {
         return $this->productRepository->getByCode($productCode);
     }
@@ -34,19 +34,37 @@ class ProductServiceImplementation implements ProductService
         return $this->productRepository->getById($id);
     }
 
-    public function updateByCode(string $productCode, array $data)
+    public function updateByProductCode(string $productCode, array $data)
     {
-        return $this->productRepository->updateByCode($productCode, $data);
+        $product = $this->productRepository->getByCode($productCode);
+
+        if (!$product) {
+            throw new \Exception('Product not found');
+        }
+
+        return $this->productRepository->update($product, $data);
     }
 
     public function updateById(int $id, array $data)
     {
-        return $this->productRepository->updateById($id, $data);
+        $product = $this->productRepository->getById($id);
+
+        if (!$product) {
+            throw new \Exception('Product not found');
+        }
+
+        return $this->productRepository->update($product, $data);
     }
 
-    public function deleteByCode(string $productCode)
+    public function deleteByProductCode(string $productCode)
     {
-        return $this->productRepository->deleteByCode($productCode);
+        $product = $this->productRepository->getByCode($productCode);
+
+        if (!$product) {
+            throw new \Exception('Product not found');
+        }
+
+        return $this->productRepository->delete($product);
     }
 
     public function deleteById(int $id)

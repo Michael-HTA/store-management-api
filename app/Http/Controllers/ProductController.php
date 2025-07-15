@@ -10,32 +10,30 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 
 class ProductController extends Controller
 {
     //
 
-    public function __construct(protected ProductService $product)
-    {
-
-    }
+    public function __construct(protected ProductService $product){}
 
     public function index()
     {
-        return new ProductCollection($this->product->getProduct(30));
+        return new ProductCollection($this->product->paginate(20));
     }
 
     public function show($id, Request $request)
     {
         try
-        {
-            $data = new ProductResource($this->product->getByCode($id));
+        {   
+            $data = new ProductResource($this->product->getById($id));
 
-            return response()->success(request: $request, data: $data);
+            return Response::success(request: $request, data: $data);
 
         }catch(ModelNotFoundException $e)
         {
-            return response()->error($request,null,'Do not found the item', 404);
+            return Response::error($request,null,'Do not found the item', 404);
         }
     }
 
@@ -43,15 +41,15 @@ class ProductController extends Controller
     {
         try {
 
-            $result = $this->product->storeProduct($request->validated());
+            $result = $this->product->store($request->validated());
 
-            return response()->success($request, new ProductResource($result), 'Store successful', 200);
+            return Response::success($request, new ProductResource($result), 'Store successful', 200);
 
         } catch (Exception $e) {
 
             // Log::error($e->getMessage());
 
-            return response()->error($request, null, 'Internal Server Error', 500);
+            return Response::error($request, null, 'Internal Server Error', 500);
         }
 
     }
@@ -61,30 +59,30 @@ class ProductController extends Controller
         {
             $data = $request->validated();
 
-            $result = new ProductResource($this->product->updateProduct($id,$data));
+            $result = new ProductResource($this->product->updateById($id,$data));
 
-            return response()->success($request, $result, 'Update successful', 200);
+            return Response::success($request, $result, 'Update successful', 200);
 
         }catch (Exception $e) {
 
             // Log::error($e->getMessage());
 
-            return response()->error($request, null, 'Internal Server Error', 500);
+            return Response::error($request, null, 'Internal Server Error', 500);
         }
     }
 
     public function delete($id, Request $request){
         try
         {
-            $this->product->deleteProduct($id);
+            $this->product->deleteById($id);
 
-            return response()->success($request, null, 'Delete successful', 200);
+            return Response::success($request, null, 'Delete successful', 200);
 
         }catch (Exception $e) {
 
             // Log::error($e->getMessage());
 
-            return response()->error($request, null, 'Internal Server Error', 500);
+            return Response::error($request, null, 'Internal Server Error', 500);
         }
     }
 

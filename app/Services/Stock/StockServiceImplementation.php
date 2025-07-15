@@ -1,36 +1,35 @@
 <?php
 namespace App\Services\Stock;
+
+use App\Exceptions\InvalidProductException;
+use App\Repositories\Stock\StockRepository;
 use App\Services\Stock\StockService;
 
 class  StockServiceImplementation implements StockService{
 
-    public function __construct(protected ProductService $productService, protected Product $product){}
+    public function __construct(protected StockRepository $stockRepository){}
 
-    public function subtractStock(string $id, int $quantity)
+    public function subtract(string $productCode, int $quantity)
     {
-        $product = $this->productService->getProductByProductCode($id);
+        $stock = $this->stockRepository->getByProductCode($productCode);
 
-        if($product->quantity <= 0) throw new InvalidProductException("Out of Stock!");
+        if($stock->quantity <= 0) throw new InvalidProductException("Out of Stock!");
 
-        if($product->quantity < $quantity) throw new InvalidProductException('Insufficient stock for this product');
+        if($stock->quantity < $quantity) throw new InvalidProductException('Insufficient stock for this product');
 
-        $product->quantity = $product->quantity - $quantity;
+        $stock->quantity = $stock->quantity - $quantity;
 
-        return $product->save();
+        return $stock->save();
     }
 
     public function getOutOfStock(int $stock = 5, ?int $limit = null)
     {
-        $query = $this->product->where('quantity', '<', $stock);
-
-        if ($limit !== null) $query->limit($limit);
-
-        return $query->get();
+        return $this->stockRepository->getOutOfStock($stock, $limit);
     }
 
-    public function addStock(int $stock, string $id)
+    public function add(int $stock, string $productCode)
     {
-        $product = $this->productService->getProductByProductCode($id);
+        $product = $this->stockRepository->getByProductCode($productCode);
 
         $product->quantity += $stock;
 

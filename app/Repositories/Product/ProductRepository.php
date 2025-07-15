@@ -8,8 +8,7 @@ interface ProductRepository{
     public function getByCode(string $productCode);
     public function getById(int $id);
     public function paginate(int $perPage);
-    public function updateByCode(string $productCode, array $data);
-    public function updateById(int $id, array $data);
-    public function deleteBycode(string $productCode);
+    public function update($product, array $data);
+    public function delete($product);
     public function deleteById(int $id);
 }

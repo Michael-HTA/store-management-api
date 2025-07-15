@@ -5,7 +5,8 @@ namespace App\Providers;
 use App\Interfaces\PurchaseInterface;
 use App\Interfaces\RevenueSummaryInterface;
 use App\Interfaces\SaleInterface;
-use App\Interfaces\StockManagementInterface;
+use App\Repositories\Stock\StockRepository;
+use App\Repositories\Stock\StockRepositoryImplementation;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryImplementation;
 use App\Services\Product\ProductService as ProductProductService;
@@ -13,7 +14,8 @@ use App\Services\Product\ProductServiceImplementation;
 use App\Services\PurchaseService;
 use App\Services\RevenueSummaryService;
 use App\Services\SaleService;
-use App\Services\StockManagementService;
+use App\Services\Stock\StockService;
+use App\Services\Stock\StockServiceImplementation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -31,7 +33,8 @@ class AppServiceProvider extends ServiceProvider
         //interface binding
         $this->app->bind(ProductProductService::class,ProductServiceImplementation::class);
         $this->app->bind(ProductRepository::class,ProductRepositoryImplementation::class);
-        $this->app->bind(StockManagementInterface::class,StockManagementService::class);
+        $this->app->bind(StockRepository::class,StockRepositoryImplementation::class);
+        $this->app->bind(StockService::class,StockServiceImplementation::class);
         $this->app->bind(SaleInterface::class,SaleService::class);
         $this->app->bind(RevenueSummaryInterface::class,RevenueSummaryService::class);
         $this->app->bind(PurchaseInterface::class,PurchaseService::class);
@@ -51,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
             $key = $request->ip() . $request->path();
 
             return Limit::perMinute(10)->by($key)->response(function(Request $request) use ($key){
-                return response()->error($request, $key, 'Too Many Attempts', HttpFoundationResponse::HTTP_TOO_MANY_REQUESTS);
+                return Response::error($request, $key, 'Too Many Attempts', HttpFoundationResponse::HTTP_TOO_MANY_REQUESTS);
             });
         });
 
