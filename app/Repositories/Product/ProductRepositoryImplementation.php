@@ -56,4 +56,18 @@ class ProductRepositoryImplementation implements ProductRepository
     {
         return $this->product->destroy($id);
     }
+
+    public function updateById(int $id, array $data)
+    {
+        $product = $this->getById($id);
+
+        return $this->update($product, $data);
+    }
+
+    public function updateByCode(string $productCode, array $data)
+    {
+        $product = $this->getByCode($productCode);
+
+        return $this->update($product, $data);
+    }
 }

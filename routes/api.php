@@ -35,7 +35,7 @@ Route::get('/products', [ProductController::class, 'index']);
 
 Route::post('/products',[ProductController::class,'store']);
 Route::get('/products/out-of-stock',[StockController::class,'outOfStock']);
-Route::get('/products/{id}',[ProductController::class,'show']);
+Route::get('/products/{id}',[ProductController::class,'showByCode']);
 Route::delete('/products/{id}',[ProductController::class,'delete']);
 Route::post('/sales',[SaleController::class,'processSale']);
 Route::get('/revenues/daily',[RevenueController::class,'dailyRevenue']);

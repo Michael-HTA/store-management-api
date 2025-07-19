@@ -4,6 +4,8 @@ namespace App\Services\Product;
 
 use App\Services\Product\ProductService;
 use App\Repositories\Product\ProductRepository;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 
 class ProductServiceImplementation implements ProductService
 {
@@ -21,26 +23,37 @@ class ProductServiceImplementation implements ProductService
 
     public function paginate(int $perPage)
     {
-        return $this->productRepository->paginate($perPage);
+        $page = Request::get('page', 1);
+
+        $key = "products_paginate_{$page}";
+        
+        return Cache::store('redis')->remember($key, 600, function () use ($perPage) {
+            return $this->productRepository->paginate($perPage);
+        });
     }
 
     public function getByProductCode(string $productCode)
     {
-        return $this->productRepository->getByCode($productCode);
+        $key = "product_code_{$productCode}";
+
+        return Cache::store('redis')->remember($key, 600, function () use ($productCode) {
+            return $this->productRepository->getByCode($productCode);
+        });
+
     }
 
     public function getById(int $id)
     {
-        return $this->productRepository->getById($id);
+        $key = "product_{$id}";
+
+        return Cache::store('redis')->remember($key, 600, function () use ($id) {
+            return $this->productRepository->getById($id);
+        });
     }
 
     public function updateByProductCode(string $productCode, array $data)
     {
         $product = $this->productRepository->getByCode($productCode);
-
-        if (!$product) {
-            throw new \Exception('Product not found');
-        }
 
         return $this->productRepository->update($product, $data);
     }
@@ -49,20 +62,12 @@ class ProductServiceImplementation implements ProductService
     {
         $product = $this->productRepository->getById($id);
 
-        if (!$product) {
-            throw new \Exception('Product not found');
-        }
-
         return $this->productRepository->update($product, $data);
     }
 
     public function deleteByProductCode(string $productCode)
     {
         $product = $this->productRepository->getByCode($productCode);
-
-        if (!$product) {
-            throw new \Exception('Product not found');
-        }
 
         return $this->productRepository->delete($product);
     }

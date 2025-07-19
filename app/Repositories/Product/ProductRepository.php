@@ -11,4 +11,6 @@ interface ProductRepository{
     public function update($product, array $data);
     public function delete($product);
     public function deleteById(int $id);
+    public function updateById(int $id, array $data);
+    public function updateByCode(string $productCode, array $data);
 }

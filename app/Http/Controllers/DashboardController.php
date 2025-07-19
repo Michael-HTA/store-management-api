@@ -10,13 +10,19 @@ use Illuminate\Support\Facades\Cache;
 class DashboardController extends Controller
 {
 
-    public function index(){
+    public function index()
+    {
         // Redis::set('key', 'hello from the redis');
         // $data = Cache::store('redis')->get('key');
 
-        // Redis::set('secondkey', 'hello redis from second key');
-        // $data = Cache::store('redis')->get('secondkey');
-        $data = 'Hello world';
+        // Redis::set('finalkey', 'hello redis from second key');
+        // $data = Cache::get('secondkey');
+        // $data = Redis::get('secondkey');
+        // $data = 'Hello world';
+
+        Cache::store('redis')->put('finalkey', 'final value', 600); // 10 minutes
+        $data = Cache::store('redis')->get('finalkey');
+
         return response(['msg' => $data]);
     }
 }
