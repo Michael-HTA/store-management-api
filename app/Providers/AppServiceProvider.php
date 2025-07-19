@@ -2,16 +2,18 @@
 
 namespace App\Providers;
 
-use App\Interfaces\PurchaseInterface;
 use App\Interfaces\RevenueSummaryInterface;
 use App\Interfaces\SaleInterface;
+use App\Repositories\Purchase\PurchaseRepository;
+use App\Repositories\Purchase\PurchaseRepositoryImplementation;
 use App\Repositories\Stock\StockRepository;
 use App\Repositories\Stock\StockRepositoryImplementation;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryImplementation;
 use App\Services\Product\ProductService as ProductProductService;
 use App\Services\Product\ProductServiceImplementation;
-use App\Services\PurchaseService;
+use App\Services\Purchase\PurchaseService;
+use App\Services\Purchase\PurchaseServiceImplementation;
 use App\Services\RevenueSummaryService;
 use App\Services\SaleService;
 use App\Services\Stock\StockService;
@@ -37,7 +39,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StockService::class,StockServiceImplementation::class);
         $this->app->bind(SaleInterface::class,SaleService::class);
         $this->app->bind(RevenueSummaryInterface::class,RevenueSummaryService::class);
-        $this->app->bind(PurchaseInterface::class,PurchaseService::class);
+        $this->app->bind(PurchaseService::class,PurchaseServiceImplementation::class);
+        $this->app->bind(PurchaseRepository::class,PurchaseRepositoryImplementation::class);
     }
 
     /**

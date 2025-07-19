@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('product_code_id');
             $table->integer('purchase_price');
             $table->integer('quantity');
-            $table->timestamps();
             $table->foreign('product_code_id')->references('product_code')->on('products');
+            $table->timestamps();
         });
     }
 

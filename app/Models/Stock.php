@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Stock extends Model
 {
     use HasFactory;
-    protected $fillable = ['quantity', 'product_id'];
+    protected $fillable = ['quantity', 'product_code_id'];
 
-    public function product(){
-        return $this->belongsTo(Product::class);
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_code_id', 'product_code');
     }
 }

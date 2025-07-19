@@ -6,4 +6,5 @@ interface StockRepository{
     public function update(string $productCode, array $data);
     public function getById(int $id);
     public function getOutOfStock(int $stock = 5, ?int $limit = null);
+    public function save(Object $object);
 }

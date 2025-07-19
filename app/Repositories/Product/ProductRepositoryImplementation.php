@@ -12,7 +12,7 @@ class ProductRepositoryImplementation implements ProductRepository
         'supplier:id,name',
         'modelForm:id,name',
         'category:id,name',
-        'stock:id,product_id,quantity',
+        'stock:id,product_code_id,quantity',
     ];
 
     public function __construct(protected Product $product) {}

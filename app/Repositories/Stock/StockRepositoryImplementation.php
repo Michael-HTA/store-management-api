@@ -10,12 +10,12 @@ class StockRepositoryImplementation implements StockRepository
 
     public function getByProductCode(string $productCode)
     {
-        return $this->stock->where('product_code', $productCode)->first();
+        return $this->stock->where('product_code_id', $productCode)->first();
     }
 
     public function update(string $productCode, array $data)
     {
-        return $this->stock->where('product_code', $productCode)->update($data);
+        return $this->stock->where('product_code_id', $productCode)->update($data);
     }
 
     public function getById(int $id)
@@ -31,7 +31,7 @@ class StockRepositoryImplementation implements StockRepository
                 'product.supplier:id,name',
                 'product.modelForm:id,name',
                 'product.category:id,name',
-                'product.stock:id,product_id,quantity'
+                'product.stock:id,product_code_id,quantity'
             ])
             ->where('quantity', '<=', $stock);
 
@@ -40,5 +40,10 @@ class StockRepositoryImplementation implements StockRepository
         }
 
         return $query->get()->pluck('product')->filter();
+    }
+
+    public function save(Object $object)
+    {
+        return $object->save();
     }
 }

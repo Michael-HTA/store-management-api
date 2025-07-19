@@ -19,7 +19,7 @@ class  StockServiceImplementation implements StockService{
 
         $stock->quantity = $stock->quantity - $quantity;
 
-        return $stock->save();
+        return $this->stockRepository->save($stock);
     }
 
     public function getOutOfStock(int $stock = 5, ?int $limit = null)
@@ -33,6 +33,6 @@ class  StockServiceImplementation implements StockService{
 
         $product->quantity += $stock;
 
-        return $product->save();
+        return $this->stockRepository->save($product);
     }
 }

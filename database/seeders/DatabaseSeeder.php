@@ -202,12 +202,12 @@ class DatabaseSeeder extends Seeder
 
         Stock::create([
             'quantity' => 10,
-            'product_id' => 1,
+            'product_code_id' => 'P0001',
         ]);
 
         Stock::create([
             'quantity' => 20,
-            'product_id' => 2,
+            'product_code_id' => 'P0002',
         ]);
 
 
