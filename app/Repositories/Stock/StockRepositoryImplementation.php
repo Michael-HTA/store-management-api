@@ -13,11 +13,6 @@ class StockRepositoryImplementation implements StockRepository
         return $this->stock->where('product_code_id', $productCode)->first();
     }
 
-    public function update(string $productCode, array $data)
-    {
-        return $this->stock->where('product_code_id', $productCode)->update($data);
-    }
-
     public function getById(int $id)
     {
         return $this->stock->findOrFail($id);
@@ -42,8 +37,18 @@ class StockRepositoryImplementation implements StockRepository
         return $query->get()->pluck('product')->filter();
     }
 
-    public function save(Object $object)
+    public function update(Object $stock, array $data)
     {
-        return $object->save();
+        return $stock->update($data);
+    }
+
+    public function save(Object $stock)
+    {
+        return $stock->save();
+    }
+
+    public function getByProductCodeWithLock(string $productCode)
+    {
+        return $this->stock->where('product_code_id', $productCode)->lockForUpdate()->first();
     }
 }

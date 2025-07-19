@@ -1,38 +1,57 @@
 <?php
+
 namespace App\Services\Stock;
 
 use App\Exceptions\InvalidProductException;
 use App\Repositories\Stock\StockRepository;
 use App\Services\Stock\StockService;
+use Illuminate\Support\Facades\DB;
 
-class  StockServiceImplementation implements StockService{
+class  StockServiceImplementation implements StockService
+{
 
-    public function __construct(protected StockRepository $stockRepository){}
+    public function __construct(protected StockRepository $stockRepository) {}
 
     public function subtract(string $productCode, int $quantity)
     {
-        $stock = $this->stockRepository->getByProductCode($productCode);
+        return DB::transaction(function () use ($productCode, $quantity) {
 
-        if($stock->quantity <= 0) throw new InvalidProductException("Out of Stock!");
+            $stock = $this->stockRepository->getByProductCodeWithLock($productCode);
 
-        if($stock->quantity < $quantity) throw new InvalidProductException('Insufficient stock for this product');
+            if ($stock->quantity <= 0) {
+                throw new InvalidProductException("Out of Stock!");
+            }
 
-        $stock->quantity = $stock->quantity - $quantity;
+            if ($stock->quantity < $quantity) {
+                throw new InvalidProductException("Insufficient stock for this product");
+            }
 
-        return $this->stockRepository->save($stock);
+            $stock->quantity -= $quantity;
+
+            return $this->stockRepository->save($stock);
+        });
     }
+
 
     public function getOutOfStock(int $stock = 5, ?int $limit = null)
     {
         return $this->stockRepository->getOutOfStock($stock, $limit);
     }
 
-    public function add(int $stock, string $productCode)
+    public function addWithTransaction(int $quantity, string $productCode)
     {
-        $product = $this->stockRepository->getByProductCode($productCode);
+        return DB::transaction(function () use ($quantity, $productCode) {
 
-        $product->quantity += $stock;
+            return $this->add($quantity, $productCode);
+        });
+    }
 
-        return $this->stockRepository->save($product);
+    public function add(int $quantity, string $productCode)
+    {
+        $stock = $this->stockRepository->getByProductCodeWithLock($productCode);
+
+        $stock->quantity += $quantity;
+
+        return $this->stockRepository->save($stock);
     }
 }

@@ -4,12 +4,12 @@ namespace App\Services\Product;
 
 use App\Services\Product\ProductService;
 use App\Repositories\Product\ProductRepository;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Request;
+use App\Services\Cache\CacheInterface;
+use Illuminate\Support\Facades\DB;
 
 class ProductServiceImplementation implements ProductService
 {
-    public function __construct(protected ProductRepository $productRepository) {}
+    public function __construct(protected ProductRepository $productRepository, protected CacheInterface $cache) {}
 
     public function store(array $data)
     {
@@ -21,13 +21,11 @@ class ProductServiceImplementation implements ProductService
         return $this->productRepository->getAll();
     }
 
-    public function paginate(int $perPage)
+    public function paginate(int $perPage, int $requestPage)
     {
-        $page = Request::get('page', 1);
+        $key = "products_paginate_{$requestPage}";
 
-        $key = "products_paginate_{$page}";
-        
-        return Cache::store('redis')->remember($key, 600, function () use ($perPage) {
+        return $this->cache->remember($key, 600, function () use ($perPage) {
             return $this->productRepository->paginate($perPage);
         });
     }
@@ -36,24 +34,23 @@ class ProductServiceImplementation implements ProductService
     {
         $key = "product_code_{$productCode}";
 
-        return Cache::store('redis')->remember($key, 600, function () use ($productCode) {
-            return $this->productRepository->getByCode($productCode);
+        return $this->cache->remember($key, 600, function () use ($productCode) {
+            return $this->productRepository->getByProductCode($productCode);
         });
-
     }
 
     public function getById(int $id)
     {
         $key = "product_{$id}";
 
-        return Cache::store('redis')->remember($key, 600, function () use ($id) {
+        return $this->cache->remember($key, 600, function () use ($id) {
             return $this->productRepository->getById($id);
         });
     }
 
     public function updateByProductCode(string $productCode, array $data)
-    {
-        $product = $this->productRepository->getByCode($productCode);
+    {   
+        $product = $this->productRepository->getByProductCode($productCode);
 
         return $this->productRepository->update($product, $data);
     }
@@ -65,9 +62,29 @@ class ProductServiceImplementation implements ProductService
         return $this->productRepository->update($product, $data);
     }
 
+    public function updateByProductCodeWithTransaction(string $productCode, array $data)
+    {
+        return DB::transaction(function () use ($productCode, $data) 
+        {
+            $product = $this->productRepository->getByProductCodeWithLock($productCode);
+
+            return $this->productRepository->update($product, $data);
+        });
+    }
+
+    public function updateByIdWithTransaction(int $id, array $data)
+    {
+        return DB::transaction(function () use ($id, $data) 
+        {
+            $product = $this->productRepository->getByIdWithLock($id);
+
+            return $this->productRepository->update($product, $data);
+        });
+    }
+
     public function deleteByProductCode(string $productCode)
     {
-        $product = $this->productRepository->getByCode($productCode);
+        $product = $this->productRepository->getByProductCode($productCode);
 
         return $this->productRepository->delete($product);
     }
@@ -75,5 +92,16 @@ class ProductServiceImplementation implements ProductService
     public function deleteById(int $id)
     {
         return $this->productRepository->deleteById($id);
+    }
+
+    public function updateBasePrice(string $productCode, float $basePrice)
+    {
+        $product = $this->productRepository->getByProductCodeWithLock($productCode);
+
+        if ($product->base_price < $basePrice) {
+            $product->base_price = $basePrice;
+        }
+
+        return $this->productRepository->save($product);
     }
 }

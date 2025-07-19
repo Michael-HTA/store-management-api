@@ -27,7 +27,7 @@ class ProductRepositoryImplementation implements ProductRepository
         return $this->product->create($data);
     }
 
-    public function getByCode(string $productCode)
+    public function getByProductCode(string $productCode)
     {
         return $this->product->with($this->with)->where('product_code', $productCode)->firstOrFail();
     }
@@ -40,6 +40,11 @@ class ProductRepositoryImplementation implements ProductRepository
     public function paginate(int $perPage)
     {
         return $this->product->with($this->with)->paginate($perPage);
+    }
+
+    public function save($product)
+    {
+        return $product->save();
     }
 
     public function update($product, array $data)
@@ -57,17 +62,13 @@ class ProductRepositoryImplementation implements ProductRepository
         return $this->product->destroy($id);
     }
 
-    public function updateById(int $id, array $data)
-    {
-        $product = $this->getById($id);
-
-        return $this->update($product, $data);
+    public function getByProductCodeWithLock(string $productCode)
+    {   
+        return $this->product->where('product_code', $productCode)->lockForUpdate()->first();
     }
 
-    public function updateByCode(string $productCode, array $data)
+    public function getByIdWithLock(int $id)
     {
-        $product = $this->getByCode($productCode);
-
-        return $this->update($product, $data);
+        return $this->product->where('id', $id)->lockForUpdate()->first();
     }
 }

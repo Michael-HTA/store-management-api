@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
+use App\Services\Cache\CacheInterface;
+use App\Services\Cache\RedisCacheService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RevenueSummaryInterface::class,RevenueSummaryService::class);
         $this->app->bind(PurchaseService::class,PurchaseServiceImplementation::class);
         $this->app->bind(PurchaseRepository::class,PurchaseRepositoryImplementation::class);
+        $this->app->bind(CacheInterface::class,RedisCacheService::class);
     }
 
     /**

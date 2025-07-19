@@ -10,20 +10,13 @@ use Exception;
 
 class PurchaseServiceImplementation implements PurchaseService{
 
-    public function __construct(protected PurchaseRepository $purchaseRepository, protected StockService $stockService, protected ProductRepository $productRepository) {}
+    public function __construct(protected PurchaseRepository $purchaseRepository, protected StockService $stockService, protected ProductService $productService) {}
 
     public function makePurchase(array $data)
     {  
-        $product = $this->productRepository->getByCode($data['product_code_id']);
+        return DB::transaction(function () use ($data) {
 
-        if($product->base_price < $data['purchase_price'])
-        {
-            $product->base_price = $data['purchase_price'];
-        }
-
-        return DB::transaction(function () use ($data, $product) {
-
-            $this->productRepository->update($product, ['base_price' => $data['purchase_price']]);
+            $this->productService->updateBasePrice($data['product_code_id'], $data['purchase_price']);
 
             $this->stockService->add($data['quantity'], $data['product_code_id']);
 

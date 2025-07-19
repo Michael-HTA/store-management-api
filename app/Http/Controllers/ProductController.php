@@ -17,9 +17,11 @@ class ProductController extends Controller
 
     public function __construct(protected ProductService $product) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        return new ProductCollection($this->product->paginate(20));
+        $page = $request->get('page', 1);
+
+        return new ProductCollection($this->product->paginate(20, $page));
     }
 
     public function showById($id, Request $request)
@@ -56,7 +58,9 @@ class ProductController extends Controller
             $result = $this->product->store($request->validated());
 
             return Response::success($request, new ProductResource($result), 'Store successful', 200);
-        } catch (Exception $e) {
+
+        } catch (Exception $e) 
+        {
 
             // Log::error($e->getMessage());
 
@@ -69,11 +73,12 @@ class ProductController extends Controller
         try {
             $data = $request->validated();
 
-            $result = new ProductResource($this->product->updateById($id, $data));
+            $result = new ProductResource($this->product->updateByIdWithTransaction($id, $data));
 
             return Response::success($request, $result, 'Update successful', 200);
-        } catch (Exception $e) {
 
+        } catch (Exception $e) 
+        {
             // Log::error($e->getMessage());
 
             return Response::error($request, null, 'Internal Server Error', 500);
@@ -86,8 +91,9 @@ class ProductController extends Controller
             $this->product->deleteById($id);
 
             return Response::success($request, null, 'Delete successful', 200);
-        } catch (Exception $e) {
 
+        } catch (Exception $e) 
+        {
             // Log::error($e->getMessage());
 
             return Response::error($request, null, 'Internal Server Error', 500);
