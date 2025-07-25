@@ -2,20 +2,21 @@
 
 namespace App\Providers;
 
-use App\Interfaces\RevenueSummaryInterface;
-use App\Interfaces\SaleInterface;
 use App\Repositories\Purchase\PurchaseRepository;
 use App\Repositories\Purchase\PurchaseRepositoryImplementation;
 use App\Repositories\Stock\StockRepository;
 use App\Repositories\Stock\StockRepositoryImplementation;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryImplementation;
-use App\Services\Product\ProductService as ProductProductService;
+use App\Repositories\Revenue\RevenueRepository;
+use App\Repositories\Revenue\RevenueRepositoryImplemenation;
+use App\Repositories\Sale\SaleRepository;
+use App\Repositories\Sale\SaleRepositoryImplementation;
+use App\Services\Product\ProductService;
 use App\Services\Product\ProductServiceImplementation;
 use App\Services\Purchase\PurchaseService;
 use App\Services\Purchase\PurchaseServiceImplementation;
-use App\Services\RevenueSummaryService;
-use App\Services\SaleService;
+use App\Services\Revenue\RevenueService;
 use App\Services\Stock\StockService;
 use App\Services\Stock\StockServiceImplementation;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -26,6 +27,9 @@ use Illuminate\Support\ServiceProvider;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use App\Services\Cache\CacheInterface;
 use App\Services\Cache\RedisCacheService;
+use App\Services\Revenue\RevenueServiceImplementation;
+use App\Services\Sale\SaleService;
+use App\Services\Sale\SaleServiceImplementation;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,15 +39,17 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //interface binding
-        $this->app->bind(ProductProductService::class,ProductServiceImplementation::class);
+        $this->app->bind(ProductService::class,ProductServiceImplementation::class);
         $this->app->bind(ProductRepository::class,ProductRepositoryImplementation::class);
         $this->app->bind(StockRepository::class,StockRepositoryImplementation::class);
         $this->app->bind(StockService::class,StockServiceImplementation::class);
-        $this->app->bind(SaleInterface::class,SaleService::class);
-        $this->app->bind(RevenueSummaryInterface::class,RevenueSummaryService::class);
+        $this->app->bind(SaleService::class,SaleServiceImplementation::class);
+        $this->app->bind(RevenueService::class,RevenueServiceImplementation::class);
         $this->app->bind(PurchaseService::class,PurchaseServiceImplementation::class);
         $this->app->bind(PurchaseRepository::class,PurchaseRepositoryImplementation::class);
         $this->app->bind(CacheInterface::class,RedisCacheService::class);
+        $this->app->bind(RevenueRepository::class, RevenueRepositoryImplemenation::class);
+        $this->app->bind(SaleRepository::class, SaleRepositoryImplementation::class);
     }
 
     /**

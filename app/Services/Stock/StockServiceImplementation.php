@@ -14,21 +14,25 @@ class  StockServiceImplementation implements StockService
 
     public function subtract(string $productCode, int $quantity)
     {
+        $stock = $this->stockRepository->getByProductCodeWithLock($productCode);
+
+        if ($stock->quantity <= 0) {
+            throw new InvalidProductException("Out of Stock!");
+        }
+
+        if ($stock->quantity < $quantity) {
+            throw new InvalidProductException("Insufficient stock for this product");
+        }
+
+        $stock->quantity -= $quantity;
+
+        return $this->stockRepository->save($stock);
+    }
+
+    public function subtractWithTransaction(string $productCode, int $quantity)
+    {
         return DB::transaction(function () use ($productCode, $quantity) {
-
-            $stock = $this->stockRepository->getByProductCodeWithLock($productCode);
-
-            if ($stock->quantity <= 0) {
-                throw new InvalidProductException("Out of Stock!");
-            }
-
-            if ($stock->quantity < $quantity) {
-                throw new InvalidProductException("Insufficient stock for this product");
-            }
-
-            $stock->quantity -= $quantity;
-
-            return $this->stockRepository->save($stock);
+            return $this->subtract($productCode, $quantity);
         });
     }
 

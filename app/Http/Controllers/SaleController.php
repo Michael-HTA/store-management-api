@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidProductException;
 use App\Http\Requests\SaleRequest;
 use App\Http\Resources\InvoiceDetailCollection;
-use App\Interfaces\SaleInterface;
+use App\Services\Sale\SaleService;
 use Exception;
+use Illuminate\Support\Facades\Response;
 
 class SaleController extends Controller
 {
-    public function __construct(protected SaleInterface $saleService) {}
+    public function __construct(protected SaleService $saleService) {}
 
     public function processSale(SaleRequest $request)
     {   
@@ -27,11 +28,11 @@ class SaleController extends Controller
             
             // Log::error($e->getMessage());
 
-            return response()->error($request, null, $e->getMessage(), 500);
+            return Response::error($request, null, $e->getMessage(), 500);
 
         } catch(InvalidProductException $e)
         {
-             return response()->error($request, null, $e->getMessage(), 500);
+             return Response::error($request, null, $e->getMessage(), 500);
         }
     }
 }

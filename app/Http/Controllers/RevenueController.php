@@ -2,45 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\RevenueSummaryInterface;
-use Illuminate\Http\Request;
 use App\Jobs\ProcessRevenueCalculation;
+use App\Services\Revenue\RevenueService;
 use Illuminate\Support\Facades\Cache;
 
 class RevenueController extends Controller
 {
-    public function __construct(protected RevenueSummaryInterface $revenue)
+    public function __construct(protected RevenueService $revenue)
     {
         
     }
 
     public function monthlyRevenue()
     {
-        $key = 'monthlyRevenue';
+       $result = $this->revenue->monthlyRevenue();
 
-        if(Cache::store('redis')->has($key)){
-            return Cache::store('redis')->get($key);
-        }
-        
-        ProcessRevenueCalculation::dispatch($key);
-
-        return response()->json(['msg' => 'try again']);
+       return response()->json(['monthlyRevenue' => $result]);
     }
 
     public function dailyRevenue(){
-        return $this->revenue->dailyRevenue();
+        $result = $this->revenue->dailyRevenue();
+        return response()->json(['dailyRevenue' => $result]);
     }
 
     public function weeklyRevenue()
     {
-        $key = 'weeklyRevenue';
-
-        if(Cache::store('redis')->has($key)){
-            return Cache::store('redis')->get($key);
-        }
-        
-        ProcessRevenueCalculation::dispatch($key);
-
-        return response()->json(['msg' => 'try again']);
+        $result = $this->revenue->weeklyRevenue();
+        return response()->json(['weeklyRevenue' => $result]);
     }
 }

@@ -20,18 +20,14 @@ class Invoice extends Model
     }
 
     public function generateInvoice()
-    {   
+    {
         $id = self::max('id') + 1;
 
         $invoiceNumber = (substr(now()->year, -2)) * 1000000 + $id;
 
-        DB::transaction(function () use ($invoiceNumber) 
-        {
-            $this->create([
-                'invoice_number' => $invoiceNumber,
-            ]);
-
-        });
+        $this->create([
+            'invoice_number' => $invoiceNumber,
+        ]);
 
         return $invoiceNumber;
     }

@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use App\Services\RevenueSummaryService;
-use Illuminate\Support\Facades\Cache;
+use App\Services\Cache\CacheInterface;
 
 class ProcessRevenueCalculation implements ShouldQueue, ShouldBeUnique
 {
@@ -22,7 +22,7 @@ class ProcessRevenueCalculation implements ShouldQueue, ShouldBeUnique
      * @var int
      */
 
-    public $uniqueFor = 3600;
+    public $uniqueFor = 1800;
 
     /**
      * Create a new job instance.
@@ -41,9 +41,9 @@ class ProcessRevenueCalculation implements ShouldQueue, ShouldBeUnique
     /**
      * Execute the job.
      */
-    public function handle(RevenueSummaryService $revenue): void
+    public function handle(RevenueSummaryService $revenue, CacheInterface $cache): void
     {   
         $methodName = $this->method;
-        Cache::store('redis')->put($methodName,$revenue->$methodName(),3600);
+        $cache->remember($methodName,$revenue->$methodName(),1800);
     }
 }
